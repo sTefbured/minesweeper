@@ -1,4 +1,4 @@
-package minesweeper.ui.menubar.difficulty;
+package com.sTefbured.minesweeper.ui.menubar.difficulty;
 
 import javax.swing.*;
 

@@ -1,7 +1,7 @@
-package minesweeper.ui.menubar;
+package com.sTefbured.minesweeper.ui.menubar;
 
-import minesweeper.ui.menubar.difficulty.DifficultyMenu;
-import minesweeper.ui.menubar.game.GameMenu;
+import com.sTefbured.minesweeper.ui.menubar.difficulty.DifficultyMenu;
+import com.sTefbured.minesweeper.ui.menubar.game.GameMenu;
 
 import javax.swing.*;
 

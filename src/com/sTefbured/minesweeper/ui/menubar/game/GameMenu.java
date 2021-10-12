@@ -1,4 +1,4 @@
-package minesweeper.ui.menubar.game;
+package com.sTefbured.minesweeper.ui.menubar.game;
 
 import javax.swing.*;
 
