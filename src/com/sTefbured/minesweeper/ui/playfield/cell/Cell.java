@@ -84,7 +84,7 @@ public class Cell extends JComponent {
             g.drawImage(OPENED_MINE_ICON.getImage(), 0, 0, getWidth(), getHeight(), null);
         } else if (isMined() && isInDebugMode) {
             g.drawImage(MINE_ICON.getImage(), 0, 0, getWidth(), getHeight(), null);
-        } else if (isOpened() || parentPlayField.isInDebugMode()) {
+        } else if ((isOpened() || parentPlayField.isInDebugMode()) && actualValue != 0) {
             g.drawString(String.valueOf(shownValue), 10, 20);
         } else if (isFlagged) {
             g.drawImage(FLAG_ICON.getImage(), 5, 5, getWidth() - 10, getHeight() - 10, null);
