@@ -15,6 +15,7 @@ public class Cell extends JComponent {
     private static final ImageIcon CHECKED_ICON = loadIcon("img/cell/checked.jpg");
     private static final ImageIcon FLAG_ICON = loadIcon("img/cell/flag.png");
     private static final ImageIcon MINE_ICON = loadIcon("img/cell/mine.png");
+    private static final ImageIcon OPENED_MINE_ICON = loadIcon("img/cell/mine_opened.png");
 
     private final PlayField parentPlayField;
     private int row;
@@ -79,8 +80,10 @@ public class Cell extends JComponent {
         super.paintComponent(g);
         g.drawImage(currentLook.getImage(), 0, 0, getWidth(), getHeight(), null);
         boolean isInDebugMode = parentPlayField.isInDebugMode();
-        if (isMined() && (isOpened() || isInDebugMode)) {
-            g.drawImage(MINE_ICON.getImage(), 5, 5, getWidth() - 10, getHeight() - 10, null);
+        if (isMined() && isOpened()) {
+            g.drawImage(OPENED_MINE_ICON.getImage(), 0, 0, getWidth(), getHeight(), null);
+        } else if (isMined() && isInDebugMode) {
+            g.drawImage(MINE_ICON.getImage(), 0, 0, getWidth(), getHeight(), null);
         } else if (isOpened() || parentPlayField.isInDebugMode()) {
             g.drawString(String.valueOf(shownValue), 10, 20);
         } else if (isFlagged) {
