@@ -6,6 +6,8 @@ import org.apache.logging.log4j.Logger;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.util.Random;
 
 public class PlayField extends JPanel {
@@ -44,6 +46,13 @@ public class PlayField extends JPanel {
         }
         setNumbers(cells);
         LOGGER.info("Finished creating and adding cellButtons");
+        addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                super.componentResized(e);
+                repaint();
+            }
+        });
     }
 
     private void setMines(int minesCount) {
