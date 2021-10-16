@@ -52,6 +52,9 @@ public class GameContext implements Serializable {
     }
 
     public void setDifficulty(Difficulty difficulty) {
+        if (this.difficulty == difficulty) {
+            return;
+        }
         this.difficulty = difficulty;
         newGame();
     }
