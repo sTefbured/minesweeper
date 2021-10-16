@@ -53,6 +53,7 @@ public class GameContext implements Serializable {
 
     public void setDifficulty(Difficulty difficulty) {
         this.difficulty = difficulty;
+        newGame();
     }
 
     public void setMainFrame(MainFrame mainFrame) {

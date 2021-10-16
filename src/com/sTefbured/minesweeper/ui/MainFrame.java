@@ -1,5 +1,6 @@
 package com.sTefbured.minesweeper.ui;
 
+import com.sTefbured.minesweeper.core.GameContext;
 import com.sTefbured.minesweeper.ui.menubar.MenuBar;
 import com.sTefbured.minesweeper.ui.playfield.PlayField;
 import org.apache.commons.lang3.tuple.Triple;
@@ -22,7 +23,7 @@ public class MainFrame extends JFrame {
         super(APPLICATION_TITLE);
         setJMenuBar(new MenuBar());
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        createPlayField(30, 16, 99);
+        createPlayField(GameContext.getInstance().getPlayFieldInfo());
         LOGGER.debug("Before adding play field");
         add(playField);
         LOGGER.debug("After adding play field");
