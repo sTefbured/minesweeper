@@ -7,6 +7,8 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 public class Cell extends JComponent {
@@ -16,11 +18,23 @@ public class Cell extends JComponent {
     private static final ImageIcon FLAG_ICON = loadIcon("img/cell/flag.png");
     private static final ImageIcon MINE_ICON = loadIcon("img/cell/mine.png");
     private static final ImageIcon OPENED_MINE_ICON = loadIcon("img/cell/mine_opened.png");
+    private static final Map<Integer, ImageIcon> VALUE_TO_ICON = new HashMap<Integer, ImageIcon>() {
+        {
+            put(1, loadIcon("img/cell/opened1.png"));
+            put(2, loadIcon("img/cell/opened2.png"));
+            put(3, loadIcon("img/cell/opened3.png"));
+            put(4, loadIcon("img/cell/opened4.png"));
+            put(5, loadIcon("img/cell/opened5.png"));
+            put(6, loadIcon("img/cell/opened6.png"));
+            put(7, loadIcon("img/cell/opened7.png"));
+            put(8, loadIcon("img/cell/opened8.png"));
+        }
+    };
 
     private final PlayField parentPlayField;
+
     private int row;
     private int column;
-
     private ImageIcon currentLook = UNCHECKED_ICON;
     private int actualValue;
     private int shownValue;
@@ -46,10 +60,15 @@ public class Cell extends JComponent {
         });
         addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e) {
+            public void mouseReleased(MouseEvent e) {
                 if (e.getButton() == MouseEvent.BUTTON1 && !isFlagged && !isOpened()) {
                     open();
-                } else if (e.getButton() == MouseEvent.BUTTON3) {
+                }
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+                if (e.getButton() == MouseEvent.BUTTON3) {
                     isFlagged = !isFlagged;
                     repaint();
                 }
@@ -85,7 +104,7 @@ public class Cell extends JComponent {
         } else if (isMined() && isInDebugMode) {
             g.drawImage(MINE_ICON.getImage(), 0, 0, getWidth(), getHeight(), null);
         } else if ((isOpened() || parentPlayField.isInDebugMode()) && actualValue != 0) {
-            g.drawString(String.valueOf(shownValue), 10, 20);
+            g.drawImage(VALUE_TO_ICON.get(shownValue).getImage(), 0, 0, getWidth(), getHeight(), null);
         } else if (isFlagged) {
             g.drawImage(FLAG_ICON.getImage(), 5, 5, getWidth() - 10, getHeight() - 10, null);
         }
