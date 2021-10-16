@@ -68,7 +68,7 @@ public class Cell extends JComponent {
 
             @Override
             public void mousePressed(MouseEvent e) {
-                if (e.getButton() == MouseEvent.BUTTON3) {
+                if ((e.getButton() == MouseEvent.BUTTON3) && !isOpened()) {
                     isFlagged = !isFlagged;
                     repaint();
                 }
