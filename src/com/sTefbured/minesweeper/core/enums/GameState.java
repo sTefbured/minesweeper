@@ -1,4 +1,4 @@
-package com.sTefbured.minesweeper.core;
+package com.sTefbured.minesweeper.core.enums;
 
 public enum GameState {
     BEFORE_START,

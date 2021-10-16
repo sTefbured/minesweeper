@@ -1,5 +1,7 @@
 package com.sTefbured.minesweeper.core;
 
+import com.sTefbured.minesweeper.core.enums.Difficulty;
+import com.sTefbured.minesweeper.core.enums.GameState;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.io.Serializable;
@@ -21,13 +23,25 @@ public class GameContext implements Serializable {
     private static GameContext instance;
 
     private Difficulty difficulty = Difficulty.EASY;
-    private GameState state;
+    private GameState state = GameState.BEFORE_START;
 
     private GameContext() {
     }
 
+    public GameState getState() {
+        return state;
+    }
+
+    public void setState(GameState state) {
+        this.state = state;
+    }
+
     public Pair<Integer, Integer> getPlayFieldSize() {
         return DIFFICULTY_TO_FIELD_SIZE_MAP.get(difficulty);
+    }
+
+    public Difficulty getDifficulty() {
+        return difficulty;
     }
 
     public void setDifficulty(Difficulty difficulty) {
