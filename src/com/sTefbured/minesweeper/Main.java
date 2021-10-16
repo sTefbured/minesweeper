@@ -1,5 +1,6 @@
 package com.sTefbured.minesweeper;
 
+import com.sTefbured.minesweeper.core.GameContext;
 import com.sTefbured.minesweeper.ui.MainFrame;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -12,7 +13,7 @@ public class Main {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             try {
-                MainFrame frame = new MainFrame();
+                GameContext.getInstance().setMainFrame(new MainFrame());
             } catch (Exception exception) {
                 LOGGER.fatal("Uncaught exception", exception);
                 System.exit(-1);

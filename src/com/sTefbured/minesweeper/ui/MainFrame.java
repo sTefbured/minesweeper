@@ -2,6 +2,7 @@ package com.sTefbured.minesweeper.ui;
 
 import com.sTefbured.minesweeper.ui.menubar.MenuBar;
 import com.sTefbured.minesweeper.ui.playfield.PlayField;
+import org.apache.commons.lang3.tuple.Triple;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -15,11 +16,13 @@ import static com.sTefbured.minesweeper.Constants.APPLICATION_TITLE;
 public class MainFrame extends JFrame {
     private static final Logger LOGGER = LogManager.getLogger(MainFrame.class);
 
+    private PlayField playField;
+
     public MainFrame() {
         super(APPLICATION_TITLE);
         setJMenuBar(new MenuBar());
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        PlayField playField = new PlayField(16, 30, 99);
+        createPlayField(30, 16, 99);
         LOGGER.debug("Before adding play field");
         add(playField);
         LOGGER.debug("After adding play field");
@@ -36,5 +39,18 @@ public class MainFrame extends JFrame {
         pack();
         setLocationRelativeTo(null);
         setVisible(true);
+    }
+
+    public void createPlayField(Triple<Integer, Integer, Integer> fieldInfo) {
+        createPlayField(fieldInfo.getLeft(), fieldInfo.getMiddle(), fieldInfo.getRight());
+    }
+
+    public void createPlayField(int rows, int columns, int mines) {
+        if (playField != null) {
+            remove(playField);
+        }
+        playField = new PlayField(rows, columns, mines);
+        add(playField);
+        pack();
     }
 }
