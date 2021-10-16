@@ -71,6 +71,9 @@ public class Cell extends JComponent {
                 if ((e.getButton() == MouseEvent.BUTTON3) && !isOpened()) {
                     isFlagged = !isFlagged;
                     repaint();
+                } else if ((e.getButton() == MouseEvent.BUTTON1) && !isOpened()) {
+                    currentLook = CHECKED_ICON;
+                    repaint();
                 }
             }
 
