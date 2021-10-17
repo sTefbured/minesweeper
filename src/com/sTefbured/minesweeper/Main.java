@@ -13,6 +13,7 @@ public class Main {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             try {
+                LOGGER.info("Start of the application");
                 GameContext.getInstance().setMainFrame(new MainFrame());
             } catch (Exception exception) {
                 LOGGER.fatal("Uncaught exception", exception);

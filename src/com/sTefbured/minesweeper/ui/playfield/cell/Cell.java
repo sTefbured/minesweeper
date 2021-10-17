@@ -35,6 +35,9 @@ public class Cell extends JComponent {
         }
     };
 
+    private static Cell lastEntered;
+    private static boolean isPressingLeftMouse;
+
     private final PlayField parentPlayField;
 
     private int row;
@@ -65,8 +68,9 @@ public class Cell extends JComponent {
         addMouseListener(new MouseAdapter() {
             @Override
             public void mouseReleased(MouseEvent e) {
-                if (e.getButton() == MouseEvent.BUTTON1 && !isFlagged && !isOpened()) {
-                    open();
+                if (e.getButton() == MouseEvent.BUTTON1 && !lastEntered.isFlagged && !lastEntered.isOpened()) {
+                    lastEntered.open();
+                    isPressingLeftMouse = false;
                 }
             }
 
@@ -76,18 +80,24 @@ public class Cell extends JComponent {
                     isFlagged = !isFlagged;
                     LOGGER.info("Cell[{}][{}]: the flag was {}", row, column, isFlagged ? "set" : "removed");
                     repaint();
-                } else if ((e.getButton() == MouseEvent.BUTTON1) && !isOpened()) {
+                } else if ((e.getButton() == MouseEvent.BUTTON1) && !isOpened() && !isFlagged) {
                     currentLook = CHECKED_ICON;
+                    isPressingLeftMouse = true;
                     repaint();
                 }
             }
 
             @Override
             public void mouseEntered(MouseEvent e) {
+                lastEntered = Cell.this;
                 if (isOpened) {
                     return;
                 }
-                currentLook = SELECTED_ICON;
+                if (isPressingLeftMouse) {
+                    currentLook = CHECKED_ICON;
+                } else {
+                    currentLook = SELECTED_ICON;
+                }
                 repaint();
             }
 
