@@ -163,9 +163,11 @@ public class Cell extends JComponent {
     }
 
     public void open() {
-        currentLook = CHECKED_ICON;
-        isOpened = true;
-        parentPlayField.cellPressed(row, column);
+        if (!isFlagged) {
+            currentLook = CHECKED_ICON;
+            isOpened = true;
+            parentPlayField.cellPressed(row, column);
+        }
     }
 
     public boolean isMined() {
