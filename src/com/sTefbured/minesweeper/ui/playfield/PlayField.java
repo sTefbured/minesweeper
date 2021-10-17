@@ -1,5 +1,7 @@
 package com.sTefbured.minesweeper.ui.playfield;
 
+import com.sTefbured.minesweeper.core.GameContext;
+import com.sTefbured.minesweeper.core.enums.GameState;
 import com.sTefbured.minesweeper.ui.playfield.cell.Cell;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -94,6 +96,18 @@ public class PlayField extends JPanel {
     }
 
     public void cellPressed(int row, int column) {
+        GameContext gameContext = GameContext.getInstance();
+        if (gameContext.getState() == GameState.BEFORE_START) {
+            gameContext.setState(GameState.PLAYING);
+        }
+        if (cells[row][column].isMined()) {
+            gameContext.setState(GameState.FAILURE);
+            repaint();
+            return;
+        }
+        if (isGameEnded()) {
+            gameContext.setState(GameState.SUCCESS);
+        }
         openNeighbours(row, column);
     }
 
@@ -106,6 +120,17 @@ public class PlayField extends JPanel {
             }
         }
         repaint();
+    }
+
+    private boolean isGameEnded() {
+        for (Cell[] cellRow : cells) {
+            for (Cell cell : cellRow) {
+                if (!cell.isOpened() && !cell.isMined()) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     private int getPreviousRow(int currentRow) {

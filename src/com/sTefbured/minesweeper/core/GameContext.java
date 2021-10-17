@@ -4,6 +4,8 @@ import com.sTefbured.minesweeper.core.enums.Difficulty;
 import com.sTefbured.minesweeper.core.enums.GameState;
 import com.sTefbured.minesweeper.ui.MainFrame;
 import org.apache.commons.lang3.tuple.Triple;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -11,6 +13,7 @@ import java.util.Map;
 
 public class GameContext implements Serializable {
     private static final long serialVersionUID = 8601644419936902758L;
+    private static final Logger LOGGER = LogManager.getLogger(GameContext.class);
 
     private static final Map<Difficulty, Triple<Integer, Integer, Integer>> DIFFICULTY_TO_FIELD_INFO_MAP
             = new HashMap<Difficulty, Triple<Integer, Integer, Integer>>() {
@@ -31,7 +34,7 @@ public class GameContext implements Serializable {
     }
 
     public void newGame() {
-        state = GameState.BEFORE_START;
+        setState(GameState.BEFORE_START);
         mainFrame.createPlayField(getPlayFieldInfo());
     }
 
@@ -40,6 +43,7 @@ public class GameContext implements Serializable {
     }
 
     public void setState(GameState state) {
+        LOGGER.info("Game state has changed from {} to {}", this.state, state);
         this.state = state;
     }
 

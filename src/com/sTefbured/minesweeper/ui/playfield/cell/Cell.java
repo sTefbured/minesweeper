@@ -1,6 +1,8 @@
 package com.sTefbured.minesweeper.ui.playfield.cell;
 
 import com.sTefbured.minesweeper.ui.playfield.PlayField;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,6 +14,8 @@ import java.util.Map;
 import java.util.Objects;
 
 public class Cell extends JComponent {
+    private static final Logger LOGGER = LogManager.getLogger(Cell.class);
+
     private static final ImageIcon UNCHECKED_ICON = loadIcon("img/cell/unchecked.jpg");
     private static final ImageIcon SELECTED_ICON = loadIcon("img/cell/selected.jpg");
     private static final ImageIcon CHECKED_ICON = loadIcon("img/cell/checked.jpg");
@@ -70,6 +74,7 @@ public class Cell extends JComponent {
             public void mousePressed(MouseEvent e) {
                 if ((e.getButton() == MouseEvent.BUTTON3) && !isOpened()) {
                     isFlagged = !isFlagged;
+                    LOGGER.info("Cell[{}][{}]: the flag was {}", row, column, isFlagged ? "set" : "removed");
                     repaint();
                 } else if ((e.getButton() == MouseEvent.BUTTON1) && !isOpened()) {
                     currentLook = CHECKED_ICON;
