@@ -1,14 +1,15 @@
 package com.sTefbured.minesweeper.ui.playfield.cell;
 
 import com.sTefbured.minesweeper.ui.playfield.PlayField;
+import com.sTefbured.minesweeper.ui.playfield.cell.listener.CellMouseListener;
+import com.sTefbured.minesweeper.ui.playfield.cell.listener.CellMouseMotionListener;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.net.URL;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -16,13 +17,13 @@ import java.util.Objects;
 public class Cell extends JComponent {
     private static final Logger LOGGER = LogManager.getLogger(Cell.class);
 
-    private static final ImageIcon UNCHECKED_ICON = loadIcon("img/cell/unchecked.jpg");
-    private static final ImageIcon SELECTED_ICON = loadIcon("img/cell/selected.jpg");
-    private static final ImageIcon CHECKED_ICON = loadIcon("img/cell/checked.jpg");
-    private static final ImageIcon FLAG_ICON = loadIcon("img/cell/flag.png");
-    private static final ImageIcon MINE_ICON = loadIcon("img/cell/mine.png");
-    private static final ImageIcon OPENED_MINE_ICON = loadIcon("img/cell/mine_opened.png");
-    private static final Map<Integer, ImageIcon> VALUE_TO_ICON = new HashMap<Integer, ImageIcon>() {
+    public static final ImageIcon UNCHECKED_ICON = loadIcon("img/cell/unchecked.jpg");
+    public static final ImageIcon SELECTED_ICON = loadIcon("img/cell/selected.jpg");
+    public static final ImageIcon CHECKED_ICON = loadIcon("img/cell/checked.jpg");
+    public static final ImageIcon FLAG_ICON = loadIcon("img/cell/flag.png");
+    public static final ImageIcon MINE_ICON = loadIcon("img/cell/mine.png");
+    public static final ImageIcon OPENED_MINE_ICON = loadIcon("img/cell/mine_opened.png");
+    public static final Map<Integer, ImageIcon> VALUE_TO_ICON = Collections.unmodifiableMap(new HashMap<Integer, ImageIcon>() {
         {
             put(1, loadIcon("img/cell/opened1.png"));
             put(2, loadIcon("img/cell/opened2.png"));
@@ -33,7 +34,7 @@ public class Cell extends JComponent {
             put(7, loadIcon("img/cell/opened7.png"));
             put(8, loadIcon("img/cell/opened8.png"));
         }
-    };
+    });
 
     private static Cell lastEntered;
     private static boolean isPressingLeftMouse;
@@ -55,61 +56,8 @@ public class Cell extends JComponent {
     }
 
     private void addListeners() {
-        addMouseMotionListener(new MouseAdapter() {
-            @Override
-            public void mouseMoved(MouseEvent e) {
-                if (isOpened) {
-                    return;
-                }
-                currentLook = SELECTED_ICON;
-                repaint();
-            }
-        });
-        addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseReleased(MouseEvent e) {
-                if (e.getButton() == MouseEvent.BUTTON1 && !lastEntered.isFlagged && !lastEntered.isOpened()) {
-                    lastEntered.open();
-                    isPressingLeftMouse = false;
-                }
-            }
-
-            @Override
-            public void mousePressed(MouseEvent e) {
-                if ((e.getButton() == MouseEvent.BUTTON3) && !isOpened()) {
-                    isFlagged = !isFlagged;
-                    LOGGER.info("Cell[{}][{}]: the flag was {}", row, column, isFlagged ? "set" : "removed");
-                    repaint();
-                } else if ((e.getButton() == MouseEvent.BUTTON1) && !isOpened() && !isFlagged) {
-                    currentLook = CHECKED_ICON;
-                    isPressingLeftMouse = true;
-                    repaint();
-                }
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                lastEntered = Cell.this;
-                if (isOpened) {
-                    return;
-                }
-                if (isPressingLeftMouse) {
-                    currentLook = CHECKED_ICON;
-                } else {
-                    currentLook = SELECTED_ICON;
-                }
-                repaint();
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-                if (isOpened) {
-                    return;
-                }
-                currentLook = UNCHECKED_ICON;
-                repaint();
-            }
-        });
+        addMouseMotionListener(new CellMouseMotionListener());
+        addMouseListener(new CellMouseListener());
     }
 
     @Override
@@ -123,7 +71,7 @@ public class Cell extends JComponent {
             g.drawImage(MINE_ICON.getImage(), 0, 0, getWidth(), getHeight(), null);
         } else if ((isOpened() || parentPlayField.isInDebugMode()) && actualValue != 0) {
             g.drawImage(VALUE_TO_ICON.get(shownValue).getImage(), 0, 0, getWidth(), getHeight(), null);
-        } else if (isFlagged) {
+        } else if (isFlagged()) {
             g.drawImage(FLAG_ICON.getImage(), 5, 5, getWidth() - 10, getHeight() - 10, null);
         }
     }
@@ -158,6 +106,14 @@ public class Cell extends JComponent {
         this.column = column;
     }
 
+    public boolean isFlagged() {
+        return isFlagged;
+    }
+
+    public void setFlagged(boolean isFlagged) {
+        this.isFlagged = isFlagged;
+    }
+
     public boolean isOpened() {
         return isOpened;
     }
@@ -170,11 +126,31 @@ public class Cell extends JComponent {
         }
     }
 
+    public void setCurrentLook(ImageIcon currentLook) {
+        this.currentLook = currentLook;
+    }
+
     public boolean isMined() {
         return actualValue == -1;
     }
 
     public boolean hasMinedNeighbours() {
         return actualValue != 0;
+    }
+
+    public static Cell getLastEntered() {
+        return lastEntered;
+    }
+
+    public static void setLastEntered(Cell lastEntered) {
+        Cell.lastEntered = lastEntered;
+    }
+
+    public static boolean isPressingLeftMouse() {
+        return isPressingLeftMouse;
+    }
+
+    public static void setPressingLeftMouse(boolean isPressingLeftMouse) {
+        Cell.isPressingLeftMouse = isPressingLeftMouse;
     }
 }
